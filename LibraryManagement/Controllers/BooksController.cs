@@ -157,5 +157,16 @@ namespace LibraryManagement.Controllers
         {
             return this.booksService.GetAllBooksWithAuthors<BookViewModel>().ToList().Any(e => e.Id == id);
         }
+
+        public IActionResult Search()
+        {
+            return View("SearchForm");
+        }
+
+        [HttpPost]
+        public IActionResult Search(string searchPhrase)
+        {
+            return View("Index", this.booksService.GetAllBooksWithAuthors<BookViewModel>().Where(b => b.Title.Contains(searchPhrase)).ToList());
+        }
     }
 }

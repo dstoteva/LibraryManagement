@@ -1,5 +1,12 @@
+using AutoMapper;
 using LibraryManagement.Data;
+using LibraryManagement.Models;
+using LibraryManagement.Services;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Globalization;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +14,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Application services
+builder.Services.AddTransient<IBooksService, BooksService>();
+builder.Services.AddTransient<IAuthorsService, AuthorsService>();
+
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
+
 var app = builder.Build();
+
+AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

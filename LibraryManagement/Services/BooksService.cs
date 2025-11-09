@@ -12,9 +12,16 @@ namespace LibraryManagement.Services
             this.context = context;
         }
 
-        public IEnumerable<T> GetAllBooksWithAuthors<T>()
+        public IEnumerable<T> GetAllBooksWithAuthors<T>(int? take = null, int skip = 0)
         {
-            return this.context.Books.To<T>().ToList();
+            var allBooks = this.context.Books.OrderBy(b => b.Title).Skip(skip);
+
+            if (take.HasValue)
+            {
+                allBooks = allBooks.Take(take.Value);
+            }
+
+            return allBooks.To<T>().ToList();
         }
 
         public T GetById<T>(int id)
@@ -53,6 +60,11 @@ namespace LibraryManagement.Services
 
             this.context.Books.Update(book);
             await this.context.SaveChangesAsync();
+        }
+
+        public int GetBooksCount()
+        {
+            return this.context.Books.Count();
         }
     }
 }

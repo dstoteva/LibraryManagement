@@ -4,7 +4,7 @@ namespace LibraryManagement.Services
 {
     public interface IBooksService
     {
-        IEnumerable<T> GetAllBooksWithAuthors<T>();
+        IEnumerable<T> GetAllBooksWithAuthors<T>(int? take = null, int skip = 0);
 
         T GetById<T>(int id);
 
@@ -13,5 +13,7 @@ namespace LibraryManagement.Services
         Task DeleteAsync(int id);
 
         Task EditAsync(int id, string title, int? year, bool isAvailable, int authorId);
+
+        int GetBooksCount();
     }
 }

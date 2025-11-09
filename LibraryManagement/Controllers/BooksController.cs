@@ -16,6 +16,7 @@ namespace LibraryManagement.Controllers
     {
         private readonly IBooksService booksService;
         private readonly IAuthorsService authorsService;
+        private const int itemsPerPage = 5;
 
         public BooksController(IBooksService booksService, IAuthorsService authorsService)
         {
@@ -24,9 +25,17 @@ namespace LibraryManagement.Controllers
         }
 
         // GET: Books
-        public IActionResult Index()
+        public IActionResult Index(int currentPage = 1)
         {
-            return View(this.booksService.GetAllBooksWithAuthors<BookViewModel>().ToList());
+            var books = this.booksService.GetAllBooksWithAuthors<BookViewModel>(itemsPerPage, (currentPage - 1) * itemsPerPage).ToList();
+            int booksCount = this.booksService.GetBooksCount();
+
+            int pagesCount = (booksCount - 1) / itemsPerPage + 1;
+
+            ViewBag.PagesCount = pagesCount;
+            ViewBag.CurrentPage = currentPage;
+
+            return View(books);
         }
 
         // GET: Books/5

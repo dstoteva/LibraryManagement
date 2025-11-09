@@ -45,5 +45,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "booksPerPage",
+    pattern: "Books/{currentPage?}",
+    defaults: new { controller = "Books", action = "Index" });
 
 app.Run();
